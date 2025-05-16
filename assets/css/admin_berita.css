@@ -1,0 +1,38 @@
+body {
+    padding-top: 56px;
+    overflow-x: hidden;
+}
+
+.custom-sidebar {
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+}
+
+@media (min-width: 768px) {
+    .custom-sidebar {
+    width: 200px;
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    padding-top: 1rem;
+    overflow-y: auto;
+    }
+
+    .main-content {
+    margin-left: 200px;
+    }
+}
+
+.main-content {
+    padding: 1rem;
+}
+
+table {
+    width: 100%;
+}
+
+.img-thumbnail {
+    max-width: 100%;
+    height: auto;
+}
