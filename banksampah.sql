@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2025 at 03:46 AM
+-- Generation Time: May 22, 2025 at 12:53 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -76,17 +76,6 @@ CREATE TABLE `penjemputan` (
   `id_petugas` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `penjemputan`
---
-
-INSERT INTO `penjemputan` (`id_penjemputan`, `id_user`, `tanggal`, `status`, `id_petugas`) VALUES
-(21, 13, '2025-05-13 00:00:00', 'diterima', 16),
-(22, 13, '2025-05-13 00:00:00', 'diterima', 16),
-(24, 20, '2025-05-14 00:00:00', 'diterima', 16),
-(25, 20, '2025-05-14 16:51:40', 'diterima', 16),
-(26, 20, '2025-05-14 16:53:46', 'diterima', 16);
-
 -- --------------------------------------------------------
 
 --
@@ -106,8 +95,7 @@ CREATE TABLE `petugas` (
 --
 
 INSERT INTO `petugas` (`id_petugas`, `nama_petugas`, `username`, `password`, `no_hp`) VALUES
-(16, 'Petugas1', 'petugas1', '$2y$10$ElypDAcISBN1s77ZNtiX8.28SFtnNZoKblSsjX1mXFrZFwhTkRzcK', '081234567890'),
-(19, 'Petugas2', 'petugas2', '$2y$10$4Z428lVsEhUVW5ryBuKh1.CE1HP54qsj/kzoIMzBe.GZFaoDR1vI2', '081234567890');
+(19, 'Petugas1', 'petugas1', '$2y$10$BBweuRPoD186AATKTplxyu06HBTjzZUlYopGld.RKDInvXVRcTH9W', '081234567890');
 
 -- --------------------------------------------------------
 
@@ -129,7 +117,8 @@ CREATE TABLE `sampah` (
 INSERT INTO `sampah` (`id_sampah`, `nama_sampah`, `harga`, `gambar`) VALUES
 (6, 'Botol Plastik', 4000.00, '68245d66ebdff_erik-mclean-GjCx5KhulZI-unsplash.jpg'),
 (8, 'Koran Bekas', 3000.00, '682201c0ddd84_Kertas.jpg'),
-(9, 'Plastik', 2000.00, '68245ecb37b26_Plastik.jpg');
+(9, 'Plastik', 2000.00, '68245ecb37b26_Plastik.jpg'),
+(15, 'Besi', 5000.00, '682ef653e69fc_Besi.jpg');
 
 -- --------------------------------------------------------
 
@@ -154,26 +143,8 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`id_transaksi`, `id_petugas`, `id_user`, `id_sampah`, `nama_sampah`, `jumlah`, `harga`, `tanggal`, `status`) VALUES
-(8, 16, 13, 6, 'Botol Plastic', 3.00, 4000, '2025-05-12 22:31:12', 'diterima'),
-(9, 16, 13, 8, 'Koran Bekas', 2.00, 3000, '2025-05-12 22:35:44', 'diterima'),
-(10, 16, 13, 6, 'Botol Plastic', 1.00, 4000, '2025-05-12 22:43:40', 'diterima'),
-(11, 16, 13, 8, 'Koran Bekas', 7.00, 3000, '2025-05-13 00:10:44', 'diterima'),
-(13, 16, 20, 8, 'Koran Bekas', 25.00, 3000, '2025-05-14 16:12:30', 'diterima'),
-(14, 16, 20, 8, 'Koran Bekas', 2.00, 3000, '2025-05-14 16:22:25', 'ditolak'),
-(15, 16, 20, 8, 'Koran Bekas', 2.00, 3000, '2025-05-14 16:22:45', 'ditolak'),
-(16, 16, 20, 6, 'Botol Plastic', 1.00, 4000, '2025-05-14 16:28:04', 'ditolak'),
-(17, 16, 20, 6, 'Botol Plastic', 1.00, 4000, '2025-05-14 16:28:08', 'ditolak'),
-(18, 16, 20, 8, 'Koran Bekas', 1.00, 3000, '2025-05-14 16:28:17', 'ditolak'),
-(19, 16, 20, 8, 'Koran Bekas', 1.00, 3000, '2025-05-14 16:28:40', 'ditolak'),
-(20, 16, 20, 6, 'Botol Plastic', 2.00, 4000, '2025-05-14 16:28:51', 'ditolak'),
-(21, 16, 20, 6, 'Botol Plastic', 2.00, 4000, '2025-05-14 16:29:00', 'ditolak'),
-(22, 16, 20, 6, 'Botol Plastic', 2.20, 4000, '2025-05-14 16:30:27', 'ditolak'),
-(23, 16, 20, 6, 'Botol Plastic', 12.30, 4000, '2025-05-14 16:30:41', 'ditolak'),
-(24, 16, 20, 8, 'Koran Bekas', 3.11, 3000, '2025-05-14 16:30:56', 'diterima'),
-(25, 16, 20, 8, 'Koran Bekas', 2.50, 3000, '2025-05-14 16:37:57', 'diterima'),
-(26, 16, 20, 6, 'Botol Plastik', 2.90, 4000, '2025-05-14 17:34:04', 'diterima'),
-(27, 16, 20, 6, 'Botol Plastik', 2.90, 4000, '2025-05-14 17:34:42', 'diterima'),
-(28, 19, 20, 8, 'Koran Bekas', 10.50, 3000, '2025-05-14 18:15:16', 'diterima');
+(44, 19, 13, 15, 'Besi', 2.00, 5000, '2025-05-22 17:38:38', 'diterima'),
+(45, 19, 13, 15, 'Besi', 2.00, 5000, '2025-05-22 17:45:38', 'diterima');
 
 -- --------------------------------------------------------
 
@@ -196,8 +167,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `nama_user`, `username`, `password`, `no_hp`, `email`, `alamat`) VALUES
-(13, 'Apriesna 1229', 'zulhan1229', '$2y$10$By9KjWqjtJpsCPkld/E5j.wLDbXUhkMv1FBVt11aIReDAqkdPhbS.', '081243834669', 'apriesnazulhan1250@gmail.com', 'Mataram Nusa Tenggara Barat'),
-(20, 'Ridho Aidil', 'ridho1229', '$2y$10$XbxeeZ9pIpDbm4c90c7lVuXINLNSG35/rju0L4f/P0LXrtr7QBF2S', '081243834669', 'ridho1250@gmail.com', 'Mataram Nusa Tenggara Barat');
+(13, 'Apriesna Zulhan', 'zulhan', '$2y$10$cmzwALYephf3C/tsXmH5MefD5g.1ZQpwnLqJnGiE00VEibylE1pWq', '081243834669', 'apriesnazulhan1250@gmail.com', 'Mataram Nusa Tenggara Barat'),
+(20, 'Ridho Aidil', 'ridho', '$2y$10$SQjn5BKWEjeXWwXLqMGpqu9XP6SNpV9hazOLlfESwRl.cxX.wWoey', '081243834669', 'ridho1250@gmail.com', 'Mataram Nusa Tenggara Barat');
 
 --
 -- Indexes for dumped tables
@@ -270,7 +241,7 @@ ALTER TABLE `berita`
 -- AUTO_INCREMENT for table `penjemputan`
 --
 ALTER TABLE `penjemputan`
-  MODIFY `id_penjemputan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_penjemputan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `petugas`
@@ -282,13 +253,13 @@ ALTER TABLE `petugas`
 -- AUTO_INCREMENT for table `sampah`
 --
 ALTER TABLE `sampah`
-  MODIFY `id_sampah` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_sampah` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_transaksi` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `user`
