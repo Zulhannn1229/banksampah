@@ -76,7 +76,6 @@ $result_history = $stmt_history->get_result();
         <div class="custom-sidebar">
             <ul class="nav flex-column">
                 <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="petugas_dashboard.php"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="petugas_user.php"><i class="bi bi-people me-2"></i> Data User</a></li>
                 <li class="nav-item"><a class="nav-link active text-dark bg-success bg-opacity-25 rounded px-3 py-2" href="petugas_penjemputan.php"><i class="bi bi-truck me-2"></i> Penjemputan</a></li>
                 <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="petugas_transaksi.php"><i class="bi bi-cash-coin me-2"></i> Transaksi</a></li>
             </ul>

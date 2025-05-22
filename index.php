@@ -89,7 +89,7 @@ $sampah = $conn->query("SELECT * FROM sampah ORDER BY nama_sampah ASC");
         <section class="py-5 bg-light">
             <div class="container">
                 <h2 class="text-center mb-4">Layanan Kami</h2>
-                <div class="row">
+                <div class="row justify-content-center">
                     <div class="col-md-4">
                         <div class="card shadow-sm mb-4 text-center">
                             <div class="card-body">
@@ -105,15 +105,6 @@ $sampah = $conn->query("SELECT * FROM sampah ORDER BY nama_sampah ASC");
                                 <i class="bi bi-cash-coin fs-1 text-success"></i>
                                 <h5 class="mt-3">Tukar Sampah Jadi Uang</h5>
                                 <p>Sampah Anda akan dibayar sesuai harga pasar.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm mb-4 text-center">
-                            <div class="card-body">
-                                <i class="bi bi-bar-chart-line fs-1 text-success"></i>
-                                <h5 class="mt-3">Statistik Lingkungan</h5>
-                                <p>Lihat dampak positif Anda terhadap lingkungan.</p>
                             </div>
                         </div>
                     </div>
@@ -191,7 +182,7 @@ $sampah = $conn->query("SELECT * FROM sampah ORDER BY nama_sampah ASC");
         <footer class="footer bg-success text-white py-3">
             <div class="container text-center">
                 <p>&copy; 2025 Bank Sampah. All rights reserved.</p>
-                <p><i class="bi bi-instagram me-2"></i> @banksampah | <i class="bi bi-whatsapp mx-2"></i> 0812-3456-7890</p>
+                <p><i class="bi bi-instagram me-2"></i> @banksampah | <i class="bi bi-whatsapp mx-2"></i> 0812-4383-4669</p>
             </div>
         </footer>
 

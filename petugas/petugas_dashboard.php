@@ -8,10 +8,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'petugas') {
 
 $id_petugas = $_SESSION['user_id']; 
 
-$stmtUser = $conn->prepare("SELECT COUNT(*) AS total_user FROM user");
-$stmtUser->execute();
-$resultUser = $stmtUser->get_result();
-$dataUser = $resultUser->fetch_assoc();
+$stmtTransaksi = $conn->prepare("SELECT COUNT(*) AS total_transaski FROM transaksi WHERE id_petugas = ? AND status = 'diterima'");
+$stmtTransaksi->bind_param("i", $id_petugas);
+$stmtTransaksi->execute();
+$resultPetugas = $stmtTransaksi->get_result();
+$dataTransaksi = $resultPetugas->fetch_assoc();
+$stmtTransaksi->close();
 
 $stmtSampah = $conn->prepare("SELECT SUM(jumlah) AS total_sampah FROM transaksi WHERE status='Diterima' AND id_petugas = ?");
 $stmtSampah->bind_param("i", $id_petugas);
@@ -69,11 +71,6 @@ while ($row = $resultGrafik->fetch_assoc()) {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark px-3 py-2" href="petugas_user.php">
-                        <i class="bi bi-people me-2"></i> Data User
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link text-dark px-3 py-2" href="petugas_penjemputan.php">
                         <i class="bi bi-truck me-2"></i> Penjemputan
                     </a>
@@ -92,8 +89,8 @@ while ($row = $resultGrafik->fetch_assoc()) {
                 <div class="col-md-4">
                     <div class="card text-white bg-success">
                         <div class="card-body">
-                            <h5 class="card-title">Jumlah User</h5>
-                            <p class="display-6 fw-bold"><?= $dataUser['total_user'] ?? 0; ?></p>
+                            <h5 class="card-title">Jumlah Transaksi</h5>
+                            <p class="display-6 fw-bold"><?= $dataTransaksi['total_transaski'] ?? 0; ?></p>
                         </div>
                     </div>
                 </div>

@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $users = $conn->query("SELECT id_user, nama_user FROM user ORDER BY nama_user");
 $sampah = $conn->query("SELECT id_sampah, nama_sampah, harga FROM sampah");
 
-// Ambil riwayat transaksi oleh petugas
 $riwayat = $conn->prepare("
     SELECT t.*, u.nama_user 
     FROM transaksi t 
@@ -84,11 +83,6 @@ $riwayat_result = $riwayat->get_result();
                 <li class="nav-item">
                     <a class="nav-link text-dark px-3 py-2" href="petugas_dashboard.php">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark px-3 py-2" href="petugas_user.php">
-                        <i class="bi bi-people me-2"></i> Data User
                     </a>
                 </li>
                 <li class="nav-item">

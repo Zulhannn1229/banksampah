@@ -10,11 +10,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
 $id_user = intval($_SESSION['user_id']);
 $username = htmlspecialchars($_SESSION['username'] ?? 'User');
 
-$stmtUser = $conn->prepare("SELECT COUNT(*) AS total_user FROM user");
-$stmtUser->execute();
-$resultUser = $stmtUser->get_result();
-$dataUser = $resultUser->fetch_assoc();
-$stmtUser->close();
+$stmtTransaksi = $conn->prepare("SELECT COUNT(*) AS total_transaksi FROM transaksi WHERE id_user = ? AND status = 'diterima'");
+$stmtTransaksi->bind_param("i", $id_user);
+$stmtTransaksi->execute();
+$resultTransaksi = $stmtTransaksi->get_result();
+$dataTransaksi = $resultTransaksi->fetch_assoc();
+$stmtTransaksi->close();
 
 $stmtSampah = $conn->prepare("SELECT SUM(jumlah) AS total_kg FROM transaksi WHERE status = 'Diterima' AND id_user = ?");
 $stmtSampah->bind_param("i", $id_user);
@@ -98,8 +99,8 @@ $resultSampahList = $conn->query("SELECT * FROM sampah ORDER BY nama_sampah ASC"
             <div class="col-md-4">
                 <div class="card text-white bg-info">
                     <div class="card-body">
-                        <h5 class="card-title">Jumlah User Terdaftar</h5>
-                        <p class="fs-3"><?= $dataUser['total_user'] ?? 0; ?> User</p>
+                        <h5 class="card-title">Jumlah Transaksi User</h5>
+                        <p class="fs-3"><?= $dataTransaksi['total_transaksi'] ?? 0; ?> Transaksi</p>
                     </div>
                 </div>
             </div>

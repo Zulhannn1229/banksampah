@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit'])) {
     $email    = sanitize($_POST['email']);
     $nohp     = sanitize($_POST['no_hp']);
     $alamat   = sanitize($_POST['alamat']);
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
 
     if (!validateEmail($email)) {
         $_SESSION['error'] = "Email tidak valid.";
@@ -71,12 +72,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit'])) {
         $stmt->bind_param("si", $username, $id);
         $stmt->execute();
         $stmt->store_result();
+
         if ($stmt->num_rows > 0) {
             $_SESSION['error'] = "Username sudah digunakan oleh user lain.";
         } else {
             $stmt->close();
-            $stmt = $conn->prepare("UPDATE user SET nama_user=?, username=?, email=?, no_hp=?, alamat=? WHERE id_user=?");
-            $stmt->bind_param("sssssi", $nama, $username, $email, $nohp, $alamat, $id);
+
+            if (!empty($password)) {
+                // Hash password jika diisi
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                $stmt = $conn->prepare("UPDATE user SET nama_user=?, username=?, email=?, no_hp=?, alamat=?, password=? WHERE id_user=?");
+                $stmt->bind_param("ssssssi", $nama, $username, $email, $nohp, $alamat, $hashed_password, $id);
+            } else {
+                // Jika password tidak diubah
+                $stmt = $conn->prepare("UPDATE user SET nama_user=?, username=?, email=?, no_hp=?, alamat=? WHERE id_user=?");
+                $stmt->bind_param("sssssi", $nama, $username, $email, $nohp, $alamat, $id);
+            }
+
             if ($stmt->execute()) {
                 $_SESSION['success'] = "User berhasil diperbarui.";
             } else {
@@ -85,9 +97,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit'])) {
         }
         $stmt->close();
     }
+
     header("Location: admin_user.php");
     exit;
 }
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['hapus'])) {
     $id = intval($_GET['hapus']);
