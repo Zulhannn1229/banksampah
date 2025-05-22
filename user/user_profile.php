@@ -1,11 +1,7 @@
 <?php
-session_start();
 include '../config/db.php';
-
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
-    header("Location: ../login.php");
-    exit;
-}
+require_once '../auth/checkAuth.php';
+checkAuth('user');
 
 $id_user = $_SESSION['id_user'] ?? null;
 $username = $_SESSION['username'] ?? 'User';
@@ -80,7 +76,7 @@ $conn->close();
     <title>Profil User - Bank Sampah</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <link href="../assets/css/user_profile.css" rel="stylesheet" />
+    <link href="../assets/css/masyarakat.css" rel="stylesheet" />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-success fixed-top">

@@ -24,6 +24,10 @@ body {
     max-width: 100%;
 }
 
+.table-responsive {
+    overflow-x: auto;
+}
+
 .scrolling-wrapper {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;

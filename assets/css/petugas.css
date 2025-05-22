@@ -23,3 +23,7 @@ body {
     overflow-x: auto;
     max-width: 100%;
 }
+
+.table-responsive {
+    overflow-x: auto;
+}

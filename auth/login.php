@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/db.php'; 
+require_once '../config/db.php';
 
 $error = '';
 
@@ -12,32 +12,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Username dan password harus diisi.";
     } else {
         $roles = [
-            ['table' => 'admin', 'id_column' => 'id_admin', 'redirect' => '../admin/admin_dashboard.php'],
-            ['table' => 'petugas', 'id_column' => 'id_petugas', 'redirect' => '../petugas/petugas_dashboard.php'],
-            ['table' => 'user', 'id_column' => 'id_user', 'redirect' => '../user/user_dashboard.php'],
+            'admin' => [
+                'table' => 'admin',
+                'id_column' => 'id_admin',
+                'redirect' => '../admin/admin_dashboard.php',
+                'session_keys' => ['id_admin', 'username', 'role']
+            ],
+            'petugas' => [
+                'table' => 'petugas',
+                'id_column' => 'id_petugas',
+                'redirect' => '../petugas/petugas_dashboard.php',
+                'session_keys' => ['id_petugas', 'username', 'role', 'nama_petugas']
+            ],
+            'user' => [
+                'table' => 'user',
+                'id_column' => 'id_user',
+                'redirect' => '../user/user_dashboard.php',
+                'session_keys' => ['id_user', 'username', 'role', 'nama_user', 'email']
+            ]
         ];
 
-        foreach ($roles as $role) {
-            $stmt = $conn->prepare("SELECT * FROM {$role['table']} WHERE username = ?");
+        $authenticated = false;
+        
+        foreach ($roles as $roleName => $roleConfig) {
+            $stmt = $conn->prepare("SELECT * FROM {$roleConfig['table']} WHERE username = ? LIMIT 1");
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
-            $akun = $result->fetch_assoc();
-            $stmt->close();
-
-            if ($akun && password_verify($password, $akun['password'])) {
-                $_SESSION['user_id'] = $akun[$role['id_column']];
-                $_SESSION['username'] = $akun['username'];
-                $_SESSION['role'] = $role['table'];
-
-                $_SESSION[$role['id_column']] = $akun[$role['id_column']];
-
-                header("Location: {$role['redirect']}");
-                exit();
+            
+            if ($result->num_rows === 1) {
+                $akun = $result->fetch_assoc();
+                
+                if (password_verify($password, $akun['password'])) {
+                    $_SESSION['user_id'] = $akun[$roleConfig['id_column']];
+                    $_SESSION['username'] = $akun['username'];
+                    $_SESSION['role'] = $roleName;
+                    
+                    foreach ($roleConfig['session_keys'] as $key) {
+                        if (isset($akun[$key])) {
+                            $_SESSION[$key] = $akun[$key];
+                        }
+                    }
+                    
+                    $authenticated = true;
+                    header("Location: {$roleConfig['redirect']}");
+                    exit();
+                }
             }
+            $stmt->close();
         }
 
-        $error = "Username atau password salah.";
+        if (!$authenticated) {
+            $error = "Username atau password salah.";
+            error_log("Failed login attempt for username: $username");
+        }
     }
 }
 ?>
