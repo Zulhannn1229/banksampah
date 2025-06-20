@@ -94,6 +94,7 @@ $conn->close();
         <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="user_transaksi.php"><i class="bi bi-cash-coin me-2"></i> Transaksi</a></li>
         <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="user_penjemputan.php"><i class="bi bi-truck me-2"></i> Penjemputan</a></li>
         <li class="nav-item"><a class="nav-link active text-dark px-3 py-2 bg-success bg-opacity-25 rounded" href="#"><i class="bi bi-person-circle me-2"></i> Profil</a></li>
+        <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="user_feedback.php"><i class="bi bi-chat-square-text me-2"></i> Feedback</a></li>
       </ul>
     </div>
 

@@ -9,18 +9,43 @@ $error = '';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tanggal = date('Y-m-d H:i:s');
-
-    $stmt = $conn->prepare("INSERT INTO penjemputan (id_user, tanggal) VALUES (?, ?)");
-    if ($stmt) {
-        $stmt->bind_param("is", $id_user, $tanggal);
-        if ($stmt->execute()) {
-            $success = "Pengajuan penjemputan berhasil dikirim!";
-        } else {
-            $error = "Gagal mengajukan penjemputan: " . $stmt->error;
-        }
-        $stmt->close();
+    $berat_perkiraan = isset($_POST['berat_perkiraan']) ? (float) $_POST['berat_perkiraan'] : 0;
+    
+    if ($berat_perkiraan <= 0) {
+        $error = "Perkiraan berat sampah harus lebih dari 0 kg.";
     } else {
-        $error = "Terjadi kesalahan saat mempersiapkan query.";
+        // Cek apakah kolom berat_perkiraan sudah ada di database
+        $checkColumn = $conn->query("SHOW COLUMNS FROM penjemputan LIKE 'berat_perkiraan'");
+        
+        if ($checkColumn->num_rows > 0) {
+            // Kolom sudah ada, gunakan query dengan berat_perkiraan
+            $stmt = $conn->prepare("INSERT INTO penjemputan (id_user, tanggal, berat_perkiraan) VALUES (?, ?, ?)");
+            if ($stmt) {
+                $stmt->bind_param("isd", $id_user, $tanggal, $berat_perkiraan);
+                if ($stmt->execute()) {
+                    $success = "Pengajuan penjemputan berhasil dikirim!";
+                } else {
+                    $error = "Gagal mengajukan penjemputan: " . $stmt->error;
+                }
+                $stmt->close();
+            } else {
+                $error = "Terjadi kesalahan saat mempersiapkan query.";
+            }
+        } else {
+            // Kolom belum ada, gunakan query tanpa berat_perkiraan
+            $stmt = $conn->prepare("INSERT INTO penjemputan (id_user, tanggal) VALUES (?, ?)");
+            if ($stmt) {
+                $stmt->bind_param("is", $id_user, $tanggal);
+                if ($stmt->execute()) {
+                    $success = "Pengajuan penjemputan berhasil dikirim! (Catatan: Fitur berat sampah memerlukan update database)";
+                } else {
+                    $error = "Gagal mengajukan penjemputan: " . $stmt->error;
+                }
+                $stmt->close();
+            } else {
+                $error = "Terjadi kesalahan saat mempersiapkan query.";
+            }
+        }
     }
 }
 
@@ -78,6 +103,11 @@ if ($stmtRiwayat) {
                         <i class="bi bi-person-circle me-2"></i> Profil
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark px-3 py-2" href="user_feedback.php">
+                        <i class="bi bi-chat-square-text me-2"></i> Feedback
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -91,7 +121,21 @@ if ($stmtRiwayat) {
             <?php endif; ?>
 
             <form method="post" class="mb-4">
-                <button type="submit" class="btn btn-success">Ajukan Penjemputan Hari Ini</button>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Form Pengajuan Penjemputan</h5>
+                        <div class="mb-3">
+                            <label for="berat_perkiraan" class="form-label">Perkiraan Berat Sampah (kg)</label>
+                            <input type="number" class="form-control" id="berat_perkiraan" name="berat_perkiraan" 
+                                   step="0.1" min="0.1" max="1000" required 
+                                   placeholder="Masukkan perkiraan berat sampah dalam kg">
+                            <div class="form-text">Masukkan perkiraan berat sampah yang akan dijemput (dalam kilogram)</div>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-truck me-2"></i>Ajukan Penjemputan
+                        </button>
+                    </div>
+                </div>
             </form>
 
             <h4>Riwayat Pengajuan Penjemputan</h4>
@@ -101,6 +145,7 @@ if ($stmtRiwayat) {
                         <tr>
                             <th>#</th>
                             <th>Tanggal Pengajuan</th>
+                            <th>Perkiraan Berat (kg)</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -111,6 +156,7 @@ if ($stmtRiwayat) {
                                 <tr>
                                     <td><?= $no++; ?></td>
                                     <td><?= htmlspecialchars($row['tanggal']); ?></td>
+                                    <td><?= number_format($row['berat_perkiraan'], 1); ?> kg</td>
                                     <td>
                                         <?php
                                         $status = $row['status'];
@@ -126,7 +172,7 @@ if ($stmtRiwayat) {
                             <?php endwhile;
                         else: ?>
                             <tr>
-                                <td colspan="3" class="text-center">Belum ada pengajuan penjemputan.</td>
+                                <td colspan="4" class="text-center">Belum ada pengajuan penjemputan.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

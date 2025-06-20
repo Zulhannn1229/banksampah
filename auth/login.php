@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (password_verify($password, $akun['password'])) {
                     $_SESSION['user_id'] = $akun[$roleConfig['id_column']];
                     $_SESSION['username'] = $akun['username'];
-                    $_SESSION['role'] = $roleName;
+                    $_SESSION['role'] = $roleName; 
                     
                     foreach ($roleConfig['session_keys'] as $key) {
                         if (isset($akun[$key])) {

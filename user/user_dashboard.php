@@ -71,6 +71,11 @@ $resultSampahList = $conn->query("SELECT * FROM sampah ORDER BY nama_sampah ASC"
                     <i class="bi bi-person-circle me-2"></i> Profil
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark px-3 py-2" href="user_feedback.php">
+                    <i class="bi bi-chat-square-text me-2"></i> Feedback
+                </a>
+            </li>
         </ul>
     </div>
     <main class="main-content">

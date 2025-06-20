@@ -11,7 +11,7 @@ function toggleReadMore(button) {
     const preview = container.querySelector('.card-text-preview');
     const moreText = container.querySelector('.card-text-more');
     
-    if (moreText.style.display === 'inline') {
+    if (moreText.style.display == 'inline') {
         moreText.style.display = 'none';
         button.textContent = 'Baca selengkapnya';
     } else {

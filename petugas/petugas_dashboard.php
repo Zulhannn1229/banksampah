@@ -120,67 +120,71 @@ while ($row = $resultGrafik->fetch_assoc()) {
             </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const labels = <?= json_encode($grafikLabels); ?>;
-        const dataSampah = <?= json_encode($grafikData); ?>;
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Mengkonversi array PHP ke format JavaScript untuk Chart.js
+            const labels = <?= json_encode($grafikLabels); ?>;       // Label sumbu X (tanggal/waktu)
+            const dataSampah = <?= json_encode($grafikData); ?>;     // Data sumbu Y (jumlah sampah dalam kg)
 
-        const ctx = document.getElementById('grafikSampahPetugas').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Sampah Diterima (kg)',
-                    data: dataSampah,
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 2,
-                    tension: 0.3,
-                    fill: true,
-                    pointRadius: 4,              // Titik pada grafik
-                    pointHoverRadius: 6          // Titik yang lebih besar saat hover
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,      // Menjaga aspek rasio grafik
-                layout: {
-                    padding: {
-                        right: 30               // Padding kanan
-                    }
+            // Mengambil elemen canvas tempat grafik akan ditampilkan
+            const ctx = document.getElementById('grafikSampahPetugas').getContext('2d');
+            
+            // Membuat instance Chart baru dengan konfigurasi
+            const chart = new Chart(ctx, {
+                type: 'line',  // Mengatur jenis grafik menjadi garis
+                data: {
+                    labels: labels,  // Mengatur label sumbu X dari data PHP
+                    datasets: [{
+                        label: 'Sampah Diterima (kg)',  // Label untuk legenda
+                        data: dataSampah,               // Nilai sumbu Y dari data PHP
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',  // Warna hijau untuk area dengan opacity 20%
+                        borderColor: 'rgba(40, 167, 69, 1)',       // Warna hijau solid untuk garis
+                        borderWidth: 2,                 // Ketebalan garis
+                        tension: 0.3,                  // Kelengkungan garis (0-1)
+                        fill: true,                     // Mengisi area di bawah garis
+                        pointRadius: 4,                 // Ukuran titik data
+                        pointHoverRadius: 6             // Ukuran titik saat dihover
+                    }]
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            autoSkip: false,
-                            maxRotation: 45,      // Rotasi label sumbu X
-                            minRotation: 30       // Rotasi label sumbu X
+                options: {
+                    responsive: true,                   // Grafik menyesuaikan ukuran container
+                    maintainAspectRatio: false,         // Memungkinkan dimensi custom
+                    layout: {
+                        padding: {
+                            right: 30                  // Menambahkan ruang di sisi kanan
+                        }
+                    },
+                    scales: {
+                        x: {  // Konfigurasi sumbu X
+                            ticks: {
+                                autoSkip: false,       // Menampilkan semua label (tanpa skip)
+                                maxRotation: 45,       // Sudut kemiringan maksimum label
+                                minRotation: 30        // Sudut kemiringan minimum label
+                            },
+                            title: {
+                                display: true,        // Menampilkan judul sumbu
+                                text: 'Tanggal'       // Judul sumbu X
+                            }
+                        },
+                        y: {  // Konfigurasi sumbu Y
+                            beginAtZero: true,        // Memulai skala dari 0 kg
+                            title: {
+                                display: true,        // Menampilkan judul sumbu
+                                text: 'Kilogram (kg)' // Judul sumbu Y
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'           // Posisi legenda di atas grafik
                         },
                         title: {
-                            display: true,
-                            text: 'Tanggal'
+                            display: true            // Mengaktifkan judul grafik (meski belum didefinisikan)
                         }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Kilogram (kg)'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'top'
-                    },
-                    title: {
-                        display: true
                     }
                 }
-            }
-        });
-    </script>
+            });
+        </script>
     </body>
 
 </html>

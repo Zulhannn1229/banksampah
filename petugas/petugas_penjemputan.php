@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['aksi'])
 }
 
 $sql_pending = "
-    SELECT p.id_penjemputan, p.tanggal, u.nama_user, u.alamat, u.no_hp
+    SELECT p.id_penjemputan, p.tanggal, p.berat_perkiraan, u.nama_user, u.alamat, u.no_hp
     FROM penjemputan p
     JOIN user u ON p.id_user = u.id_user
     WHERE p.status = 'Menunggu'
@@ -34,7 +34,7 @@ $sql_pending = "
 $result_pending = $conn->query($sql_pending);
 
 $stmt_history = $conn->prepare("
-    SELECT p.tanggal, p.status, u.nama_user, u.alamat, u.no_hp
+    SELECT p.tanggal, p.status, p.berat_perkiraan, u.nama_user, u.alamat, u.no_hp
     FROM penjemputan p
     JOIN user u ON p.id_user = u.id_user
     WHERE p.status IN ('Diterima', 'Ditolak') AND p.id_petugas = ?
@@ -85,16 +85,35 @@ $result_history = $stmt_history->get_result();
                 <?php while ($row = $result_pending->fetch_assoc()): ?>
                     <div class="card mb-3">
                         <div class="card-header bg-info text-white">
-                            Permintaan dari <?= htmlspecialchars($row['nama_user']) ?>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Permintaan dari <?= htmlspecialchars($row['nama_user']) ?></span>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-scale me-1"></i><?= number_format($row['berat_perkiraan'], 1) ?> kg
+                                </span>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <p><strong>Alamat:</strong> <?= htmlspecialchars($row['alamat']) ?></p>
-                            <p><strong>No. HP:</strong> <?= htmlspecialchars($row['no_hp']) ?></p>
-                            <p><strong>Tanggal:</strong> <?= date('d-m-Y H:i:s', strtotime($row['tanggal'])) ?></p>
-                            <form method="POST" class="d-flex gap-2 justify-content-end">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <p><strong>Alamat:</strong> <?= htmlspecialchars($row['alamat']) ?></p>
+                                    <p><strong>No. HP:</strong> <?= htmlspecialchars($row['no_hp']) ?></p>
+                                    <p><strong>Tanggal:</strong> <?= date('d-m-Y H:i:s', strtotime($row['tanggal'])) ?></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="alert alert-light mb-0">
+                                        <strong>Perkiraan Berat:</strong><br>
+                                        <span class="h5 text-primary"><?= number_format($row['berat_perkiraan'], 1) ?> kg</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <form method="POST" class="d-flex gap-2 justify-content-end mt-3">
                                 <input type="hidden" name="id" value="<?= $row['id_penjemputan'] ?>">
-                                <button type="submit" name="aksi" value="terima" class="btn btn-success">Terima</button>
-                                <button type="submit" name="aksi" value="tolak" class="btn btn-danger">Tolak</button>
+                                <button type="submit" name="aksi" value="terima" class="btn btn-success">
+                                    <i class="bi bi-check-circle me-1"></i>Terima
+                                </button>
+                                <button type="submit" name="aksi" value="tolak" class="btn btn-danger">
+                                    <i class="bi bi-x-circle me-1"></i>Tolak
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -114,6 +133,7 @@ $result_history = $stmt_history->get_result();
                             <th>Nama User</th>
                             <th>Alamat</th>
                             <th>No. HP</th>
+                            <th>Perkiraan Berat (kg)</th>
                             <th>Tanggal</th>
                             <th>Status</th>
                         </tr>
@@ -133,12 +153,15 @@ $result_history = $stmt_history->get_result();
                                 <td><?= htmlspecialchars($row['nama_user']) ?></td>
                                 <td><?= htmlspecialchars($row['alamat']) ?></td>
                                 <td><?= htmlspecialchars($row['no_hp']) ?></td>
+                                <td class="text-center">
+                                    <span class="badge bg-info"><?= number_format($row['berat_perkiraan'], 1) ?> kg</span>
+                                </td>
                                 <td><?= date('d-m-Y H:i', strtotime($row['tanggal'])) ?></td>
                                 <td><span class="badge bg-<?= $badgeClass ?>"><?= ucfirst($row['status']) ?></span></td>
                             </tr>
                         <?php endwhile; else: ?>
                             <tr>
-                                <td colspan="6" class="text-center">Belum ada riwayat penjemputan.</td>
+                                <td colspan="7" class="text-center">Belum ada riwayat penjemputan.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

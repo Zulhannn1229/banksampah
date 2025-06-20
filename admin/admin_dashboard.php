@@ -8,6 +8,11 @@ $stmtUser->execute();
 $resultUser = $stmtUser->get_result();
 $dataUser = $resultUser->fetch_assoc();
 
+// Array Assosiatif
+// $dataUser = [
+//     'total_user' => 150  // Jika ada 150 user
+// ];
+
 $stmtPetugas = $conn->prepare("SELECT COUNT(*) AS total_petugas FROM petugas");
 $stmtPetugas->execute();
 $resultPetugas = $stmtPetugas->get_result();
@@ -27,6 +32,9 @@ while ($row = $resultGrafik->fetch_assoc()) {
     $grafikLabels[] = $row['tanggal'];
     $grafikData[] = $row['total'];
 }
+
+// $grafikLabels = ['2024-01-01', '2024-01-02', '2024-01-03'];
+// $grafikData = [125.5, 89.2, 203.8];
 ?>
 
 <!DOCTYPE html>
@@ -56,6 +64,7 @@ while ($row = $resultGrafik->fetch_assoc()) {
       <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="admin_petugas.php"><i class="bi bi-person-badge me-2"></i> Data Petugas</a></li>
       <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="admin_sampah.php"><i class="bi bi-trash me-2"></i> Data Sampah</a></li>
       <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="admin_berita.php"><i class="bi bi-newspaper me-2"></i> Kelola Berita</a></li>
+      <li class="nav-item"><a class="nav-link text-dark px-3 py-2" href="admin_feedback.php"><i class="bi bi-chat-square-text me-2"></i> Feedback</a></li>
     </ul>
   </div>
 
@@ -99,27 +108,22 @@ while ($row = $resultGrafik->fetch_assoc()) {
     </div>
   </main>
 
-  <!-- Memuat file JavaScript Bootstrap bundle yang sudah di-minify (termasuk popper.js) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Memuat Chart.js dari CDN untuk membuat grafik/chart -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Mulai blok script JavaScript -->
 <script>
   // Mendapatkan konteks 2D dari elemen canvas dengan ID 'sampahChart'
   const ctx = document.getElementById('sampahChart').getContext('2d');
 
   // Membuat objek chart baru dengan tipe line (garis)
   const sampahChart = new Chart(ctx, {
-    type: 'line', // Jenis grafik: garis
-
+    type: 'line', 
     // Data untuk grafik
     data: {
-      labels: <?= json_encode($grafikLabels) ?>, // Label pada sumbu X (dari PHP)
+      labels: <?= json_encode($grafikLabels) ?>,
       datasets: [{
-        label: 'Sampah Diterima (Kg)', // Judul garis pada legenda
-        data: <?= json_encode($grafikData) ?>, // Data nilai Y (dari PHP)
+        label: 'Sampah Diterima (Kg)', 
+        data: <?= json_encode($grafikData) ?>, 
 
         borderColor: 'green', // Warna garis utama
         backgroundColor: 'rgba(0, 128, 0, 0.2)', // Warna latar belakang di bawah garis
@@ -132,12 +136,12 @@ while ($row = $resultGrafik->fetch_assoc()) {
 
     // Opsi konfigurasi tampilan grafik
     options: {
-      responsive: true, // Grafik menyesuaikan ukuran layar
-      maintainAspectRatio: false, // Tidak mempertahankan rasio tinggi/lebar bawaan
+      responsive: true, 
+      maintainAspectRatio: false, 
 
       layout: {
         padding: {
-          right: 30 // Menambahkan padding kanan grafik
+          right: 30 
         }
       },
 
@@ -145,9 +149,9 @@ while ($row = $resultGrafik->fetch_assoc()) {
       scales: {
         x: {
           ticks: {
-            autoSkip: false, // Jangan lewati label secara otomatis
-            maxRotation: 45, // Rotasi maksimum label X 45 derajat
-            minRotation: 30  // Rotasi minimum label X 30 derajat
+            autoSkip: false, 
+            maxRotation: 45, 
+            minRotation: 30  
           }
         },
         y: {
